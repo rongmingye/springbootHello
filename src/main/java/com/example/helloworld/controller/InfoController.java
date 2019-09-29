@@ -1,15 +1,15 @@
 package com.example.helloworld.controller;
 
 
+import com.example.helloworld.Helper.InfoHelper;
 import com.example.helloworld.common.api.ApiBaseResultCode;
 import com.example.helloworld.common.api.ApiResponse;
 import com.example.helloworld.entity.Info;
+import com.example.helloworld.pojo.InfoVO;
 import com.example.helloworld.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/info")
@@ -17,6 +17,9 @@ public class InfoController {
 
     @Autowired
     private InfoService infoService;
+
+    @Autowired
+    private InfoHelper infoHelper;
 
     @PostMapping("add")
     public ApiResponse<Info> add(Info info) {
@@ -32,5 +35,16 @@ public class InfoController {
             response.setData("");
             return response;
         }
+    }
+
+    @GetMapping("get/{id}")
+    public ApiResponse<Info> get(@PathVariable("id") Integer id) {
+        ApiResponse response = ApiResponse.success();
+        Info info = infoService.getById(id);
+        if(info != null) {
+            InfoVO infoVo = infoHelper.modelToVO(info);
+            response.setData(infoVo);
+        }
+        return response;
     }
 }
