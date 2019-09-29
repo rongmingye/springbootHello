@@ -5,17 +5,20 @@ import com.example.helloworld.common.api.ApiBaseResultCode;
 import com.example.helloworld.common.api.ApiResponse;
 import com.example.helloworld.entity.Info;
 import com.example.helloworld.service.InfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/info")
 public class InfoController {
 
+    @Autowired
     private InfoService infoService;
 
-    @RequestMapping("add")
+    @PostMapping("add")
     public ApiResponse<Info> add(Info info) {
         if (info == null || StringUtils.isEmpty(info.getName())) {
             return ApiResponse.failure(ApiBaseResultCode.PARAMSFAILED.code(), "缺少参数：name");
