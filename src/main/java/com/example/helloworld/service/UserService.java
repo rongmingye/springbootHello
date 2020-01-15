@@ -7,4 +7,8 @@ import com.example.helloworld.entity.User;
 public interface UserService extends IService<User> {
 
     public ApiResponse login(String username, String password);
+
+    public ApiResponse add(User user);
+
+    public User getUserByUsername(String username);
 }

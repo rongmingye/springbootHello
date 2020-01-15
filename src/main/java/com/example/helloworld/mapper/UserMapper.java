@@ -5,5 +5,5 @@ import com.example.helloworld.entity.User;
 
 public interface UserMapper extends BaseMapper<User> {
 
-    User selectByIUsername(String username);
+    User selectByUsername(String username);
 }

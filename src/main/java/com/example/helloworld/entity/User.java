@@ -25,12 +25,6 @@ public class User {
 
     private Integer sex;
 
-    /**
-     * 逻辑删除，删除：1， 未删除：0
-     */
-    @TableLogic
-    private boolean isDeleted;
-
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private  String createTime;
 

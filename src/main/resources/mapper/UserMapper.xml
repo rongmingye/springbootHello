@@ -3,7 +3,7 @@
 <mapper namespace="com.example.helloworld.mapper.UserMapper">
 si:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <resultMap id="selectByIUsername" type="com.example.helloworld.entity.User">
+    <resultMap id="selectByUsername" type="com.example.helloworld.entity.User">
         SELECT * FROM user WHERE username = #{username}
     </resultMap>
 

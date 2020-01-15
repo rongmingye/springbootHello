@@ -9,7 +9,10 @@ import com.example.helloworld.mapper.UserMapper;
 import com.example.helloworld.pojo.UserVO;
 import com.example.helloworld.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+@Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
@@ -18,19 +21,43 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public ApiResponse login(String username, String password) {
 
-        ApiResponse apiResponse = new ApiResponse();
         UserVO userVO = new UserVO();
 
-        User user = userMapper.selectByIUsername(username);
+        User dbuser = getUserByUsername(username);
 
-        if(user.getPassword().equals(password)) {
-            ObjectUtils.copyNotNullProperties(user, userVO);
-            apiResponse.success("登录成功！");
-            apiResponse.setData(userVO);
+        if(dbuser == null) {
+            return ApiResponse.failure("用户不存在");
+
+        } else if(dbuser.getPassword().equals(password)) {
+            ObjectUtils.copyNotNullProperties(dbuser, userVO);
+            return ApiResponse.successWithData(userVO);
+
         } else {
-            apiResponse.failure("密码错误！");
+            return ApiResponse.failure("密码错误！");
+        }
+    }
+
+    @Override
+    public ApiResponse add(User user) {
+        User dbuser = getUserByUsername(user.getUsername());
+
+        if(dbuser != null) {
+            return ApiResponse.failure("用户名已存在");
         }
 
-        return apiResponse;
+        this.save(user);
+
+        return ApiResponse.successWithData(user);
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        if(StringUtils.isEmpty(username)) {
+            return null;
+        }
+
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", username);
+        return userMapper.selectOne(userQueryWrapper);
     }
 }
